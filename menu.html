@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>DWH's Pizza Shop</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        /*.form-control {*/
+            /*margin-bottom: 10px;*/
+        /*}*/
+
+        /*.btn-danger {*/
+            /*margin-top: 8px;*/
+        /*}*/
+        @media print {
+            .to-print {
+                background-color: white;
+                height: 100%;
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                margin: 0;
+                padding: 15px;
+                font-size: 14px;
+                line-height: 18px;
+            }
+            .to-not-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="./index.html"><i class="glyphicon glyphicon-home"></i> DWH's Pizza Shop</a>
+        <a class="navbar-brand" href="./customers.html"><i class="glyphicon glyphicon-user"></i> Customers</a>
+        <a class="navbar-brand" href="./menu.html"><i class="glyphicon glyphicon-shopping-cart"></i> Menu</a>
+        <a class="navbar-brand" href="./about.html"><i class="glyphicon glyphicon-question-sign"></i> About</a>
+    </div>
+</nav>
+<div class="container" id="menu">
+    <div id="not-submitted">
+        <div class="col-sm-8">
+            <div class="panel panel-default text-center">
+                <div class="panel-heading">
+                    <h3>Menu</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="btn-group colors text-left" data-toggle="buttons">
+                        <a v-on:click="" href="#" class="col-sm-12 col-md-6" v-for="menuItem in menu">
+                            <label :for="menuItem.name" class="list-group-item btn btn-default text-left">
+                                <input type="checkbox"
+                                       v-on:click="index = selectedItems.indexOf(menuItem); if (index > -1) { selectedItems.splice(index, 1); total -= menuItem.amount; } else { selectedItems.push(menuItem); total += menuItem.amount; }"
+                                       v-model="menuItem.selected"
+                                       autocomplete="off" class="text-left" v-bind:id="menuItem.name">
+                                {{ formatPrice(menuItem.amount) }} | {{ menuItem.name }}
+                            </label>
+                            <!--<div v-if="menuItem.selected" v-for="addOn in menuItem.availableAddOns">-->
+                            <!--<label :for="menuItem.name" class="btn btn-default">-->
+                            <!--<input type="checkbox"-->
+                            <!--v-on:click="index = selectedItems.indexOf(menuItem); subIndex = selectedItems[index].addOns.indexOf(addOn); if (subIndex > -1) { selectedItems[index].addOns.splice(subIndex, 1); total -= menuItem.amount; } else { selectedItems.push(menuItem); total += menuItem.amount; }"-->
+                            <!--v-model="menuItem.selected"-->
+                            <!--autocomplete="off" v-bind:id="menuItem.name">-->
+                            <!--{{ formatPrice(menuItem.amount) }} | {{ menuItem.name }}-->
+                            <!--</label>-->
+                            <!--</div>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class ="text-center">New Order</h3>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <h4 v-if="selectedItems.length > 0">Selected Items</h4>
+                        <h4 v-if="selectedItems.length <= 0">No Items Selected</h4>
+                        <ul>
+                            <li v-for="selectedItem in selectedItems">
+                                {{ formatPrice(selectedItem.amount) }} | {{ selectedItem.name }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Total: {{ formatPrice(total) }}</h4>
+                        <div>
+                            <div>
+                                <select v-model="selectedCustomer">
+                                    <option selected hidden disabled value="No customer selected">Select Customer&nbsp;</option>
+                                    <option v-for="customer in customers">{{ customer.firstName }} {{ customer.lastName }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input onclick="document.getElementById('not-submitted').className = 'hidden'; document.getElementById('submitted').classList.remove('hidden');" type="submit" value="Submit Order"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="submitted" class="hidden">
+        <div class="col-sm-12">
+            <div class="to-not-print"><h2>Receipt</h2></div>
+            <div class="to-print">
+            <pre style="font-size: 125% !important;">
+                DWH's Pizza Shop
+                4157 Main St. NW, Kennesaw, GA 30144
+                ------------------------------------
+                Receipt of Sale
+                ------------------------------------
+                Customer: {{ selectedCustomer }}
+                ------------------------------------
+                Item(s) Ordered: {{ selectedItems.length }}
+                ------------------------------------
+                <span v-for="selectedItem in selectedItems">{{ formatPrice(selectedItem.amount) }} {{ selectedItem.name }}
+                </span>------------------------------------
+                {{ formatPrice(total) }} Total
+            </pre>
+            </div>
+            <button class="to-not-print" onclick="window.print()">Print</button>
+            <button class="to-not-print" onclick="location.reload()">New Order</button>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script src="node_modules/axios/dist/axios.js"></script>
+<script src="app-menu.js"></script>
+</html>

@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>DWH's Pizza Shop</title>
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <style>
+  .form-control {
+    margin-bottom: 10px;
+  }
+  .btn-danger {
+    margin-top: 8px;
+  }
+  </style>
+</head>
+<body>
+
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="./index.html"><i class="glyphicon glyphicon-home"></i> DWH's Pizza Shop</a>
+    <a class="navbar-brand" href="./customers.html"><i class="glyphicon glyphicon-user"></i> Customers</a>
+    <a class="navbar-brand" href="./menu.html"><i class="glyphicon glyphicon-shopping-cart"></i> Menu</a>
+    <a class="navbar-brand" href="./about.html"><i class="glyphicon glyphicon-question-sign"></i> About</a>
+  </div>
+</nav>
+  <div class="container" id="customers">
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>Add Customer</h3>
+        </div>
+        <div class="panel-body">
+          <div>
+            <input class="form-control" placeholder="First Name" v-model="customer.firstName">
+            <input class="form-control" placeholder="Last Name" v-model="customer.lastName">
+            <input class="form-control" placeholder="Phone Number" v-model="customer.phoneNumber"></textarea>
+            <input class="form-control" placeholder="Credit Card Type" v-model="customer.cardType">
+            <h4>Address</h4>
+            <input class="form-control" placeholder="House Number" v-model="customer.address.houseNumber">
+            <input class="form-control" placeholder="Street" v-model="customer.address.street">
+            <input class="form-control" placeholder="City" v-model="customer.address.city">
+            <input class="form-control" placeholder="State" v-model="customer.address.state">
+            <input class="form-control" placeholder="Postal Code" v-model="customer.address.postalCode">
+            <input class="form-control" placeholder="Subdivision" v-model="customer.address.subdivision">
+            <input class="form-control" placeholder="Closest Major Intersection" v-model="customer.address.closestMajorIntersection">
+            <textarea class="form-control" placeholder="Delivery Notes" v-model="customer.address.deliveryNotes"></textarea>
+
+            <button class="btn btn-primary" v-on:click="addcustomer">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="">
+      <div class="">
+        <a href="#" class="col-sm-4 list-group-item" v-for="customer in customers">
+          <h4 class="list-group-item-heading"><i class="glyphicon glyphicon-user"></i> {{ customer.firstName }} {{ customer.lastName }}</h4>
+          <h5><i class="glyphicon glyphicon-phone-alt" v-if="customer.phoneNumber"></i> {{ customer.phoneNumber }}</h5>
+          <h5><i class="glyphicon glyphicon-credit-card" v-if="customer.cardType"></i> {{ customer.cardType }}</h5>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+          <h5 v-if="customer.address" class="panel-title"><i class="glyphicon glyphicon-home"></i> Address</h5>
+        </div>
+          <ul class="list-group">
+          <li class="list-group-item" v-if="customer.address">  {{ customer.address.houseNumber }} {{ customer.address.street }}, {{ customer.address.city }} {{ customer.address.state }} {{ customer.address.postalCode }}</li>
+          <li class="list-group-item" v-if="customer.address">  Subdivision: {{ customer.address.subdivision }}</li>
+          <li class="list-group-item" v-if="customer.address">  Closest Major Intersection: {{ customer.address.closestMajorIntersection }}</li>
+          <li class="list-group-item" v-if="customer.address">  Delivery Notes: {{ customer.address.deliveryNotes }}</li>
+        </ul>
+      </div>
+          <!-- <button class="btn btn-xs btn-danger" v-on:click="deletecustomer($index)">Delete</button> -->
+        </a>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script src="node_modules/axios/dist/axios.js"></script>
+<script src="app.js"></script>
+</html>
